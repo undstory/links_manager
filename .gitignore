@@ -1,0 +1,10 @@
+
+/generated/prisma
+
+#BE
+server/**/node_modules
+server/.env
+
+#FE
+client/**/node_modules
+

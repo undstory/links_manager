@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model Link {
+  id            Int         @id @default(autoincrement())
+  url           String      @db.Text
+  title         String
+  description   String?     @db.VarChar(500)
+  status        Status      @default(TO_READ)
+  isFavorite    Boolean     @default(false)
+  categoryId    Int
+  category      Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  tags          LinkTag[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([status])
+  @@index([isFavorite])
+  @@index([createdAt])
+}
+
+model Category {
+  id            Int         @id @default(autoincrement())
+  name          String      @unique
+  links         Link[]
+}
+
+model Tag {
+  id            Int         @id @default(autoincrement())
+  name          String      @unique
+  links         LinkTag[]
+}
+
+model LinkTag {
+  linkId      Int
+  tagId       Int
+  link        Link          @relation(fields: [linkId], references: [id], onDelete: Cascade)
+  tag         Tag           @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([linkId, tagId])
+}
+
+enum Status {
+  TO_READ
+  READ
+}
+
