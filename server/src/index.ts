@@ -1,13 +1,6 @@
-import express from "express";
+import app from "./app";
+const PORT = 3001;
 
-const app = express();
-const port = 3001;
-
-app.use(express.json());
-
-app.get("/", (req, res) => {
-  res.send("hej");
-});
-app.listen(port, () => {
+app.listen(PORT, () => {
   console.log("Server running");
 });
