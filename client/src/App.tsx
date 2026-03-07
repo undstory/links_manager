@@ -1,14 +1,17 @@
 
 import './App.css'
 import Sidebar from './components/Sidebar/Sidebar';
-import MainView from './pages/MainView/MainView';
+// import DashboardPage from './pages/Dashboard/DashboardPage';
 
 function App() {
 
   return (
     <div className='main-container'>
         <Sidebar />
-        <MainView />
+        {/* <Routes>
+          <DashboardPage />
+          <Links />
+        </Routes> */}
     </div>
   )
 }

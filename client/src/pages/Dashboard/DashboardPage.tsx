@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import style from './MainView.module.scss'
 import type { LinkType } from '../../types/linkTypes';
 
-const MainView = () => {
+const DashboardPage = () => {
 
     const [ links, setLinks ] = useState<LinkType[] | null>(null)
 
@@ -40,4 +40,4 @@ const MainView = () => {
     )
 }
 
-export default MainView
+export default DashboardPage

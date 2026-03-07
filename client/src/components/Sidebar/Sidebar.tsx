@@ -4,7 +4,12 @@ const Sidebar = () => {
 
 
     return (
-        <div className={styles.sidebarContainer}><h2>Sidebar</h2></div>
+        <div className={styles.sidebarContainer}>
+            <h1 className={styles.sidebarTitle}>Link Manager</h1>
+            <nav>
+
+            </nav>
+        </div>
     )
 }
 
