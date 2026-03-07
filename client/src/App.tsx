@@ -1,12 +1,15 @@
 
 import './App.css'
+import Sidebar from './components/Sidebar/Sidebar';
+import MainView from './pages/MainView/MainView';
 
 function App() {
 
   return (
-    <>
-      Hello
-    </>
+    <div className='main-container'>
+        <Sidebar />
+        <MainView />
+    </div>
   )
 }
 
