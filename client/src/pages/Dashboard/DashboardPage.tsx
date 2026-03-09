@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import style from './MainView.module.scss'
+import style from './DashboardPage.module.scss'
 import type { LinkType } from '../../types/linkTypes';
 
 const DashboardPage = () => {

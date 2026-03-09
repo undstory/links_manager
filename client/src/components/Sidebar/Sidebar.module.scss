@@ -8,13 +8,46 @@
 .sidebarTitle {
     text-align: center;
     font-size: 1.5rem;
-    border-bottom: .5px solid #cbd5e1;
+   border-bottom: 0.5px solid rgba(203, 213, 225, 0.4);
     padding-bottom: 20px;
+    margin-bottom: 0;
+}
+
+.navWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .sidebarButton {
+    background-color: #2563eb;
+    color: #f8fafc;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: background-color 0.3s ease;
+    margin-top: auto;
+}
 
-    background-color: #2563eb
+.navLink {
+    display: block;
+    padding: 0 20px;
+    color: #cbd5e1;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    font-size: 1.1rem;
+}
+
+.navContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 35px 0;
+    justify-content: center;
+    align-content: center;
+    border-bottom: 0.5px solid rgba(203, 213, 225, 0.4);
 }
 
 // color: #f8fafc;
