@@ -1,0 +1,30 @@
+.cardTitle {
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+    padding-bottom: 16px;;
+    color: #1f2937;
+    padding-left: 16px;
+    border-bottom: 0.5px solid rgba(203, 213, 225, 0.4);
+}
+
+.cardContainer {
+    margin-bottom: 20px;
+    min-width: 500px;
+}
+
+.card {
+    background-color: #fff;
+    padding: 16px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08)
+}
+
+.cardContent {
+    display: flex;
+    flex-direction: column;
+    gap: 12px
+}
+
+.card div ul {
+    padding: 0 10px
+}
