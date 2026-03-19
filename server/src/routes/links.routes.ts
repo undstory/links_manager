@@ -17,4 +17,21 @@ router.get("/latest", async (req, res) => {
   }
 });
 
+router.patch("/:id/status", async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  try {
+    const updatedLink = await prisma.link.update({
+      where: {
+        id: Number(id),
+      },
+      data: { status },
+    });
+    res.json(updatedLink);
+  } catch (e) {
+    res.status(500).json({ error: "error" });
+  }
+});
+
 export default router;
