@@ -1,0 +1,30 @@
+
+
+.cardRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #f1f5f9;
+    &:last-child {
+        border-bottom: none;
+    }
+    &:hover {
+        background-color: #f9fafb;
+        border-radius: 8px;
+    }
+}
+
+.cardLinkTitle {
+    flex: 1;
+    margin-left: 12px;
+    font-size: 15px;
+    color: #374151;
+}
+
+.cardIcon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: #3b82f6;
+}
