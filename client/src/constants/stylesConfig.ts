@@ -9,10 +9,10 @@ export const statusConfig = {
   },
 } as const;
 
-export const iconColors = [
-  "var(--color-blue",
-  "var(--color-green",
-  "var(--color-red",
-  "var(--color-orange",
-  "var(--color-violet",
+export const colors = [
+  "var(--color-blue)",
+  "var(--color-green)",
+  "var(--color-red)",
+  "var(--color-orange)",
+  "var(--color-violet)",
 ];

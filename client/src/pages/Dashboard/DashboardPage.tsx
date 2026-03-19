@@ -3,6 +3,7 @@ import style from './DashboardPage.module.scss'
 
 
 import LatestLinks from '../../components/LatestLinks/LatestLinks';
+import TagsList from '../../components/TagsList/TagsList';
 
 
 
@@ -15,6 +16,7 @@ const DashboardPage = () => {
             </div>
             <div className={style.cardWrapper}>
             <LatestLinks />
+            <TagsList />
             </div>
         </div>
     )

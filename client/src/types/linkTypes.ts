@@ -11,3 +11,8 @@ export type LinkType = {
 };
 
 export type StatusType = "TO_READ" | "READ";
+
+export type TagType = {
+  id: number;
+  name: string;
+};

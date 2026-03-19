@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import type { LinkType, StatusType } from '../../types/linkTypes';
 import Card from '../../components/Card/Card';
 import style from './LatestLinks.module.scss'
-import { iconColors, statusConfig } from '../../constants/stylesConfig';
+import { colors, statusConfig } from '../../constants/stylesConfig';
 
 function LatestLinks () {
     const [ latestLinks, setLatestLinks ] = useState<LinkType[] | null>(null)
@@ -49,22 +49,23 @@ function LatestLinks () {
 
     return (
         <>
-            { latestLinks !== null ? (
             <Card header='Najnowsze linki'>
+            { latestLinks !== null ? (
                 <ul>{latestLinks.map((item) => {
                     const status = statusConfig[item.status]
+                    console.log(item.status, status.className)
                     return (
                         <li  key={item.id}>
                             <a href={item.url} className={style.cardRow} target="_blank" rel="noopener noreferrer" onClick={() => handleOpen(item)}>
-                                <div style={{ backgroundColor: iconColors[item.id  % iconColors.length]}} className={style.cardIcon} />
+                                <div style={{ backgroundColor: colors[item.id  % colors.length]}} className={style.cardIcon} />
                                 <span className={style.cardLinkTitle}>{item.title}</span>
                                 <span className={`badge ${status.className}`}>{status.label}</span>
                             </a>
                         </li>
                     )})}
                 </ul>
-            </Card>
             ) :  errorMessage && <p className={style.errorMessage}>{errorMessage}</p> }
+            </Card>
         </>
     )
 }
