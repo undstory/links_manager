@@ -4,19 +4,18 @@ import style from './DashboardPage.module.scss'
 
 import LatestLinks from '../../components/LatestLinks/LatestLinks';
 import TagsList from '../../components/TagsList/TagsList';
+import PageHeader from '../../components/PageHeader/PageHeader';
 
 
 
 const DashboardPage = () => {
 
     return (
-        <div className={style.mainContainer}>
-            <div className={style.header}>
-                <h2>Dashboard</h2>
-            </div>
+        <div className="mainContainer">
+            <PageHeader title="dashboard" />
             <div className={style.cardWrapper}>
-            <LatestLinks />
-            <TagsList />
+                <LatestLinks />
+                <TagsList />
             </div>
         </div>
     )

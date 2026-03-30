@@ -22,7 +22,7 @@ function TagsList () {
             if(data) setTags(data)
         } catch(e) {
             console.log(e)
-            setErrorMessage('Nie udało się pobrać danych, spróbuj póżniej')
+            setErrorMessage('Nie udało się pobrać danych, spróbuj później')
 
         }
     }
