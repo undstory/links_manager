@@ -17,6 +17,27 @@ router.get("/latest", async (req, res) => {
   }
 });
 
+router.get("/all", async (req, res) => {
+  try {
+    const allLinks = await prisma.link.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: {
+        tags: {
+          include: {
+            tag: true,
+          },
+        },
+        category: true,
+      },
+    });
+    res.json(allLinks);
+  } catch {
+    res.status(500).json({ error: "error" });
+  }
+});
+
 router.patch("/:id/status", async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
