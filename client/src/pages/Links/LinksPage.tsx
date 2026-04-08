@@ -38,7 +38,6 @@ function LinksPage() {
                   <thead>
                     <tr>
                       <th>Nazwa linku</th>
-                      <th>Adres</th>
                       <th>Kategoria</th>
                       <th>Tagi</th>
                       <th>Status</th>
@@ -54,16 +53,18 @@ function LinksPage() {
                       return (
                         <tr key={id}>
                           <td className={style.tooltip}>
-                            {title}
-                            <span className={style.tooltipText}>{description}</span>
+                            <a href={url} className={style.url} target="_blank">
+                              {title}
+                              <span className={style.tooltipText}>{description}</span>
+                            </a>
                           </td>
-                          <td>{url}</td>
                           <td>{category ? category.name : "-"}</td>
-                          <td>{tags ? tags.map(t => t.tag.name).join(", ") : "-" }</td>
+                          <td>{tags ? tags.map(t => (
+                            <span className={style.tag} key={t.tag.id}>{t.tag.name}</span>)) : "-" }</td>
                           <td>{statusName.label}</td>
                           <td>{new Date(createdAt).toLocaleDateString()}</td>
-                          <td><button>Aktualizacja</button></td>
-                          <td><button>Usuń</button></td>
+                          <td><button className={style.buttonEdit}>Aktualizacja</button></td>
+                          <td><button className={style.buttonDel}>Usuń</button></td>
                         </tr>
                       )
                     })}
