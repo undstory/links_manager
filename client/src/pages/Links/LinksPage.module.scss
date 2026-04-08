@@ -49,6 +49,10 @@ table td {
     border-bottom: 1px solid $color-gray-bg;
 }
 
+table tr:last-child td {
+    border-bottom: none;
+}
+
 .url {
     color: $color-blue-text;
     cursor: pointer;
