@@ -1,5 +1,28 @@
-
+@use "../../styles/variables" as *;
 
 .tableWrapper {
     margin: 20px;
 }
+
+.tooltip {
+    position: relative;
+    cursor: help;
+}
+
+.tooltipText {
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    background: $color-gray-text;
+    color: $color-gray-bg;
+    padding: 6px 10px;
+    border: 1px solid white;
+    border-radius: 6px;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.tooltip:hover .tooltipText {
+    opacity: 1;
+}
+

@@ -38,7 +38,6 @@ function LinksPage() {
                   <thead>
                     <tr>
                       <th>Nazwa linku</th>
-                      <th>Opis</th>
                       <th>Adres</th>
                       <th>Kategoria</th>
                       <th>Tagi</th>
@@ -54,8 +53,10 @@ function LinksPage() {
                       const statusName = statusConfig[status]
                       return (
                         <tr key={id}>
-                          <td>{title}</td>
-                          <td>{description}</td>
+                          <td className={style.tooltip}>
+                            {title}
+                            <span className={style.tooltipText}>{description}</span>
+                          </td>
                           <td>{url}</td>
                           <td>{category ? category.name : "-"}</td>
                           <td>{tags ? tags.map(t => t.tag.name).join(", ") : "-" }</td>
