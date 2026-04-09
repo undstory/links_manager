@@ -30,29 +30,6 @@
     opacity: 1;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-}
-
-table th {
-    text-align: left;
-    padding: 12px;
-    background-color: $color-gray-bg;
-    color: $color-gray-text;
-    font-weight: 600;
-}
-
-table td {
-    padding: 12px;
-    border-bottom: 1px solid $color-gray-bg;
-}
-
-table tr:last-child td {
-    border-bottom: none;
-}
-
 .url {
     color: $color-blue-text;
     cursor: pointer;

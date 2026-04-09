@@ -1,0 +1,24 @@
+@use "../../styles/variables" as *;
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.tableHeader {
+    text-align: left;
+    padding: 12px;
+    background-color: $color-gray-bg;
+    color: $color-gray-text;
+    font-weight: 600;
+}
+
+.tableBodyColumn {
+    padding: 12px;
+    border-bottom: 1px solid $color-gray-bg;
+}
+
+.table tr:last-child td {
+    border-bottom: none;
+}

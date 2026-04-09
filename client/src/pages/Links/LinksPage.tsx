@@ -3,6 +3,7 @@ import PageHeader from "../../components/PageHeader/PageHeader";
 import style from "./LinksPage.module.scss"
 import type { LinkType } from "../../types/linkTypes";
 import { statusConfig } from "../../constants/stylesConfig";
+import Table from "../../components/Table/Table";
 
 function LinksPage() {
 
@@ -28,49 +29,51 @@ function LinksPage() {
     fetchLinks()
   }, [])
 
-
   return (
     <div className="mainContainer">
       <PageHeader title="wszystkie linki"/>
              <div className={style.tableWrapper}>
               {allLinks === null ? errorMessage.length ? errorMessage : "Nie udało się pobrać danych" : (
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Nazwa linku</th>
-                      <th>Kategoria</th>
-                      <th>Tagi</th>
-                      <th>Status</th>
-                      <th>Dodane</th>
-                      <th>Aktualizuj</th>
-                      <th>Usuń link</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {allLinks.map((el: LinkType) => {
-                      const { id, title, url, description, tags, category, createdAt, status} = el
-                      const statusName = statusConfig[status]
-                      return (
-                        <tr key={id}>
-                          <td className={style.tooltip}>
-                            <a href={url} className={style.url} target="_blank">
-                              {title}
-                              <span className={style.tooltipText}>{description}</span>
-                            </a>
-                          </td>
-                          <td>{category ? category.name : "-"}</td>
-                          <td>{tags ? tags.map(t => (
-                            <span className={style.tag} key={t.tag.id}>{t.tag.name}</span>)) : "-" }</td>
-                          <td>{statusName.label}</td>
-                          <td>{new Date(createdAt).toLocaleDateString()}</td>
-                          <td><button className={style.buttonEdit}>Aktualizacja</button></td>
-                          <td><button className={style.buttonDel}>Usuń</button></td>
-                        </tr>
-                      )
-                    })}
+                <Table data={allLinks} keyExtractor={(el) => el.id} columns={[
+                  {
+                    header: "Nazwa linku",
+                    render: (el) => (
+                        <div className={style.tooltip}>
+                          <a href={el.url} className={style.url} target="_blank">
+                            {el.title}
+                          <span className={style.tooltipText}>{el.description}</span>
+                          </a>
+                        </div>
+                    )
+                  },
+                  {
+                    header: "Kategoria",
+                    render: (el) => (el.category ? el.category.name : "-")
+                  },
+                  {
+                    header: "Tagi",
+                    render: (el) => el.tags? el.tags.map(t => (
+                      <span className={style.tag} key={t.tag.id}>{t.tag.name}</span>)) : "-"
+                  },
+                  {
+                    header: "Status",
+                    render: (el) => statusConfig[el.status].label
+                  },
+                  {
+                    header: "Dodane",
+                    render: (el) => new Date(el.createdAt).toLocaleDateString()
+                  },
+                  {
+                    header: "Aktualizacja",
+                    render: () => (<button className={style.buttonEdit}>Edytuj</button>)
+                  },
+                  {
+                    header: "Usuń link",
+                    render: () => (<button className={style.buttonDel}>Usuń</button>)
+                  }
+                ]}
 
-                  </tbody>
-                </table>
+                />
               )  }
             </div>
     </div>
