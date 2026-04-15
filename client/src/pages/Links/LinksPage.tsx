@@ -16,8 +16,6 @@ function LinksPage() {
       if(!res.ok) throw new Error('Fetch failed')
 
       const data: LinkType[] = await res.json()
-      console.log(data);
-
       if(data) setAllLinks(data)
     } catch (e) {
       console.log(e)
@@ -29,10 +27,23 @@ function LinksPage() {
     fetchLinks()
   }, [])
 
+  const removeItem = async (id: number) => {
+    console.log("id do usuniecia", id)
+    try {
+      const res = await fetch(`http://localhost:3001/links/${id}`, {
+        method: 'DELETE'
+      })
+      if(!res.ok) throw new Error('Delete failed')
+      setAllLinks((prev) => prev ? prev.filter((el) => el.id !== id) : null)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   return (
-    <div className="mainContainer">
+    <div className="main__container">
       <PageHeader title="wszystkie linki"/>
-             <div className={style.tableWrapper}>
+             <div className="table__wrapper">
               {allLinks === null ? errorMessage.length ? errorMessage : "Nie udało się pobrać danych" : (
                 <Table data={allLinks} keyExtractor={(el) => el.id} columns={[
                   {
@@ -69,7 +80,7 @@ function LinksPage() {
                   },
                   {
                     header: "Usuń link",
-                    render: () => (<button className={style.buttonDel}>Usuń</button>)
+                    render: (el) => (<button className={style.buttonDel} onClick={() => removeItem(el.id)}>Usuń</button>)
                   }
                 ]}
 

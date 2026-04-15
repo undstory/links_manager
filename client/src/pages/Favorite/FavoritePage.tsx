@@ -3,7 +3,7 @@ import PageHeader from '../../components/PageHeader/PageHeader';
 
 function FavoritePage () {
     return (
-        <div className="mainContainer">
+        <div className="main__container">
             <PageHeader title="Ulubione" />
         </div>
     )

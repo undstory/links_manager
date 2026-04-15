@@ -11,7 +11,7 @@ import PageHeader from '../../components/PageHeader/PageHeader';
 const DashboardPage = () => {
 
     return (
-        <div className="mainContainer">
+        <div className="main__container">
             <PageHeader title="dashboard" />
             <div className={style.cardWrapper}>
                 <LatestLinks />

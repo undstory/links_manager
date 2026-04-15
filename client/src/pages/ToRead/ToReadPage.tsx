@@ -3,7 +3,7 @@ import PageHeader from '../../components/PageHeader/PageHeader';
 
 function ToReadPage () {
     return (
-        <div className="mainContainer">
+        <div className="main__container">
             <PageHeader title="do przeczytania" />
         </div>
     )

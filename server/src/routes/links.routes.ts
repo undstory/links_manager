@@ -55,4 +55,19 @@ router.patch("/:id/status", async (req, res) => {
   }
 });
 
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const updatedLink = await prisma.link.delete({
+      where: {
+        id: Number(id),
+      },
+    });
+    res.json(updatedLink);
+  } catch (e) {
+    res.status(500).json({ error: "error" });
+  }
+});
+
 export default router;

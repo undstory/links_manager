@@ -33,9 +33,17 @@ a {
     text-decoration: none;
 }
 
-.mainContainer {
+.main__container {
     background-color: #f8fafc;
     color: #1f2937;
     flex: 1;
     height: 100%;
+}
+
+.table__wrapper {
+    margin: 20px;
+    background-color: white;
+    border-radius: 10px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
