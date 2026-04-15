@@ -9,7 +9,7 @@ type PageHeaderProps = {
 
 const PageHeader = ({title} : PageHeaderProps) => {
     return (
-          <div className={style.linksContainer}>
+          <div className={style.headerContainer}>
                 <h2 className={style.header}>{firstLetter(title)}</h2>
             </div>
     )

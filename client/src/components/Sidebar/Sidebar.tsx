@@ -2,7 +2,11 @@ import { Link } from 'react-router';
 import styles from './Sidebar.module.scss'
 import { PATHS } from '../../constants/paths';
 
-const Sidebar = () => {
+type SidebarProps = {
+    onOpenModal: (type: "add" | "edit") => void
+}
+
+const Sidebar = ({onOpenModal} : SidebarProps) => {
 
 
     return (
@@ -15,7 +19,7 @@ const Sidebar = () => {
                     <Link className={styles.navLink} to={PATHS.TO_READ}>Do przeczytania</Link>
                     <Link className={styles.navLink} to={PATHS.FAVORITE}>Ulubione</Link>
                 </nav>
-                <button className={styles.sidebarButton}>Dodaj Link</button>
+                <button className={styles.sidebarButton} onClick={() => onOpenModal("add")}>Dodaj Link</button>
             </div>
         </div>
     )

@@ -7,12 +7,22 @@ import LinksPage from './pages/Links/LinksPage';
 import { PATHS } from './constants/paths';
 import ToReadPage from './pages/ToRead/ToReadPage'
 import FavoritePage from './pages/Favorite/FavoritePage';
+import { useState } from 'react';
+import { Modal } from './components/Modal/Modal';
+import AddModalContent from './components/AddModalContent/AddModalContent';
 
 function App() {
 
+const [modalType, setModalType] = useState<"add" | "edit" | null>(null)
+
   return (
     <div className='main-container'>
-        <Sidebar />
+        <Sidebar onOpenModal={(type) => setModalType(type)}/>
+        {modalType === 'add' ?
+          <Modal title="Dodaj link" onClose={() => setModalType(null)}>
+            <AddModalContent />
+          </Modal>
+           : null}
         <Routes>
           <Route path={PATHS.DASHBOARD} element={<DashboardPage />} />
           <Route path={PATHS.LINKS} element={<LinksPage />} />
