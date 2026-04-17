@@ -42,7 +42,7 @@ function TagsList () {
                         <span style={{ backgroundColor: colors[index % colors.length], color: "#fff"}} className="badge" key={item.id}>{item.name}</span>
                     )})}
                 </div>
-            ) :  errorMessage && <p className={style.errorMessage}>{errorMessage}</p> }
+            ) :  errorMessage ? <p className={style.errorMessage}>{errorMessage}</p> : <p>Brak tagów do wyświetlenia</p> }
             </Card>
         </>
     )
