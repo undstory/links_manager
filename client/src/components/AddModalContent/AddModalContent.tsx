@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import style from "./AddModalContent.module.scss";
 import type { Category } from "../../types/linkTypes";
 
@@ -10,7 +10,11 @@ type FormState = {
   tags: number[];
 };
 
-const AddModalContent = () => {
+type AddModalContentProps = {
+  setModalType: Dispatch<SetStateAction<"add" | "create" | null>>;
+};
+
+const AddModalContent = ({ setModalType }: AddModalContentProps) => {
   const initialState: FormState = {
     title: "",
     url: "",
@@ -26,7 +30,7 @@ const AddModalContent = () => {
     categoryId: null,
     tags: [],
   });
-
+  const [mode, setMode] = useState<"select" | "create">("select");
   const [category, setCategory] = useState<Category[]>([]);
 
   const fetchCategories = async () => {
@@ -72,6 +76,11 @@ const AddModalContent = () => {
     }));
   };
 
+  const cancelAction = () => {
+    setForm(initialState);
+    setModalType(null);
+  };
+
   return (
     <>
       <form className={style.form}>
@@ -107,27 +116,51 @@ const AddModalContent = () => {
         </label>
         <label className={style.label}>
           Kategoria:
-          <select
-            value={form.categoryId ?? ""}
-            onChange={(e) =>
-              setForm((prev) => ({
-                ...prev,
-                categoryId: Number(e.target.value),
-              }))
-            }
-          >
-            <option value="" disabled>
-              Wybierz kategorię
-            </option>
-            {category.map((el: Category) => {
-              return (
-                <option key={el.id} value="1">
-                  {el.name}
+          {mode === "select" ? (
+            <>
+              <select
+                className={style.input}
+                value={form.categoryId ?? ""}
+                onChange={(e) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    categoryId: Number(e.target.value),
+                  }))
+                }
+              >
+                <option value="" disabled>
+                  Wybierz kategorię
                 </option>
-              );
-            })}
-          </select>
+                {category.map((el: Category) => {
+                  return (
+                    <option key={el.id} value="1">
+                      {el.name}
+                    </option>
+                  );
+                })}
+              </select>
+              <button
+                type="button"
+                className="link__btn"
+                onClick={() => setMode("create")}
+              >
+                Stwórz nową kategorię:
+              </button>
+            </>
+          ) : (
+            <>
+              <input className={style.input} />
+              <button
+                type="button"
+                className="link__btn"
+                onClick={() => setMode("select")}
+              >
+                Wyszukaj kategorię
+              </button>
+            </>
+          )}
         </label>
+
         <label className={style.label}>
           Dodaj tagi oddzielone przecinkiem:
           <input
@@ -165,10 +198,18 @@ const AddModalContent = () => {
           />
         </label>
         <div className={style.buttonsWrapper}>
-          <button type="button" onClick={handleSubmit}>
+          <button
+            type="button"
+            className="button__primary"
+            onClick={handleSubmit}
+          >
             Dodaj
           </button>
-          <button type="button" onClick={() => setForm(initialState)}>
+          <button
+            type="button"
+            className="button__secondary"
+            onClick={cancelAction}
+          >
             Anuluj
           </button>
         </div>
