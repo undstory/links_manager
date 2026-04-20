@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import style from "./AddModalContent.module.scss";
+import type { Category } from "../../types/linkTypes";
 
 type FormState = {
   title: string;
@@ -25,6 +26,25 @@ const AddModalContent = () => {
     categoryId: null,
     tags: [],
   });
+
+  const [category, setCategory] = useState<Category[]>([]);
+
+  const fetchCategories = async () => {
+    try {
+      const res = await fetch("http://localhost:3001/categories");
+      if (!res.ok) throw new Error("Fetch failed");
+      const catData = await res.json();
+      console.log("categories", catData);
+
+      setCategory(catData);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   const handleSubmit = async () => {
     try {
@@ -82,6 +102,7 @@ const AddModalContent = () => {
             className={style.input}
             value={form.description}
             onChange={handleChange}
+            placeholder="Max 500 znaków"
           />
         </label>
         <label className={style.label}>
@@ -98,8 +119,13 @@ const AddModalContent = () => {
             <option value="" disabled>
               Wybierz kategorię
             </option>
-            <option value="1">Kategoria 1</option>
-            <option value="2">Kategoria 2</option>
+            {category.map((el: Category) => {
+              return (
+                <option key={el.id} value="1">
+                  {el.name}
+                </option>
+              );
+            })}
           </select>
         </label>
         <label className={style.label}>
