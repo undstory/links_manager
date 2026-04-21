@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { prisma } from "../lib/prisma";
+import { linkSchema } from "../validation/link.schema";
+import { normalizeText, formatTitle } from "../utils/formatters";
 
 const router = Router();
 
@@ -67,6 +69,36 @@ router.delete("/:id", async (req, res) => {
     res.json(updatedLink);
   } catch (e) {
     res.status(500).json({ error: "error" });
+  }
+});
+
+router.post("/", async (req, res) => {
+  const parsed = linkSchema.safeParse(req.body);
+
+  if (!parsed.success) {
+    return res.status(400).json({
+      error: "Podałeś niepoprawne dane",
+      details: parsed.error.flatten(),
+    });
+  }
+
+  const { title, url, description, categoryId, isFavorite } = parsed.data;
+
+  try {
+    const newLink = await prisma.link.create({
+      data: {
+        title: formatTitle(title),
+        url: normalizeText(url),
+        description: description ? normalizeText(description) : undefined,
+        categoryId,
+        isFavorite: isFavorite ?? false,
+      },
+    });
+
+    res.json(newLink);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: "error", details: e });
   }
 });
 

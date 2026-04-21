@@ -73,6 +73,11 @@ a {
     min-width: 100px;
 }
 
+.button__primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .button__secondary {
     background-color: $color-gray-bg;
     color: $color-gray-text;

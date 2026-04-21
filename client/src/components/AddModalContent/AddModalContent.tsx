@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import style from "./AddModalContent.module.scss";
 import type { Category } from "../../types/linkTypes";
@@ -7,11 +8,12 @@ type FormState = {
   url: string;
   description: string;
   categoryId: number | null;
-  tags: number[];
+  isFavorite: boolean;
+  // tags: number[];
 };
 
 type AddModalContentProps = {
-  setModalType: Dispatch<SetStateAction<"add" | "create" | null>>;
+  setModalType: Dispatch<SetStateAction<"add" | "edit" | null>>;
 };
 
 const AddModalContent = ({ setModalType }: AddModalContentProps) => {
@@ -20,25 +22,22 @@ const AddModalContent = ({ setModalType }: AddModalContentProps) => {
     url: "",
     description: "",
     categoryId: null,
-    tags: [],
+    isFavorite: false,
+    // tags: [],
   };
 
-  const [form, setForm] = useState<FormState>({
-    title: "",
-    url: "",
-    description: "",
-    categoryId: null,
-    tags: [],
-  });
+  const [form, setForm] = useState<FormState>(initialState);
   const [mode, setMode] = useState<"select" | "create">("select");
   const [category, setCategory] = useState<Category[]>([]);
-
+  const [newCategoryName, setNewCategoryName] = useState<string>("");
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [submitted, setSubmitted] = useState(false);
+  const firstError = Object.values(errors)[0];
   const fetchCategories = async () => {
     try {
       const res = await fetch("http://localhost:3001/categories");
       if (!res.ok) throw new Error("Fetch failed");
       const catData = await res.json();
-      console.log("categories", catData);
 
       setCategory(catData);
     } catch (e) {
@@ -50,19 +49,111 @@ const AddModalContent = ({ setModalType }: AddModalContentProps) => {
     fetchCategories();
   }, []);
 
-  const handleSubmit = async () => {
+  useEffect(() => {
+    setErrors(validate());
+  }, [form, mode, newCategoryName]);
+
+  const validate = () => {
+    const newErrors: Record<string, string> = {};
+
+    if (!form.title.trim()) {
+      newErrors.title = "Tytuł jest wymagany";
+    }
+
+    if (!form.url.trim()) {
+      newErrors.url = "URL jest wymagany";
+    } else if (!/^https?:\/\/.+/.test(form.url)) {
+      newErrors.url = "Niepoprawny format URL";
+    }
+
+    if (mode === "select" && !form.categoryId) {
+      newErrors.categoryId = "Wybierz kategorię";
+    }
+
+    if (mode === "create" && !newCategoryName.trim()) {
+      newErrors.categoryId = "Podaj nazwę kategorii";
+    }
+
+    if (form.description && form.description.length > 500) {
+      newErrors.description = "Max 500 znaków";
+    }
+
+    if (mode === "create") {
+      const name = newCategoryName.trim();
+
+      if (!name) {
+        newErrors.categoryId = "Podaj nazwę kategorii";
+      } else if (name.length < 3) {
+        newErrors.categoryId = "Min 3 znaki";
+      } else if (name.length > 30) {
+        newErrors.categoryId = "Max 30 znaków";
+      } else if (!/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ0-9 -]+$/.test(name)) {
+        newErrors.categoryId = "Tylko litery i cyfry";
+      }
+    }
+
+    return newErrors;
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSubmitted(true);
+    const errors = validate();
+
+    if (Object.keys(errors).length > 0) return;
+    let categoryId = form.categoryId;
+
+    if (mode === "create" && newCategoryName.trim() !== "") {
+      const formatted = newCategoryName
+        .trim()
+        .replace(/\s+/g, " ")
+        .toLowerCase();
+
+      const finalName = formatted.charAt(0).toUpperCase() + formatted.slice(1);
+      try {
+        const res = await fetch("http://localhost:3001/categories", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name: finalName }),
+        });
+
+        if (!res.ok) {
+          const data = await res.json();
+          setErrors((prev) => ({
+            ...prev,
+            categoryId: data.error,
+          }));
+          return;
+        }
+        const newCategory: Category = await res.json();
+        categoryId = newCategory.id;
+        setCategory((prev) => [
+          ...prev,
+          { id: categoryId!, name: newCategoryName } as Category,
+        ]);
+
+        setMode("select");
+      } catch (e) {
+        console.log(e);
+        return;
+      }
+    }
     try {
       const res = await fetch("http://localhost:3001/links", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, categoryId }),
       });
 
-      if (!res.ok) throw new Error("Error");
-
+      if (!res.ok) {
+        throw new Error("Error");
+      }
       setForm(initialState);
+      setModalType(null);
     } catch (e) {
       console.log(e);
     }
@@ -74,6 +165,11 @@ const AddModalContent = ({ setModalType }: AddModalContentProps) => {
       ...prev,
       [name]: value,
     }));
+
+    setErrors((prev) => ({
+      ...prev,
+      [name]: "",
+    }));
   };
 
   const cancelAction = () => {
@@ -81,9 +177,21 @@ const AddModalContent = ({ setModalType }: AddModalContentProps) => {
     setModalType(null);
   };
 
+  const isValid = () => {
+    if (!form.title.trim()) return false;
+    if (!form.url.trim()) return false;
+    if (!/^https?:\/\/.+/.test(form.url)) return false;
+
+    if (mode === "select" && !form.categoryId) return false;
+    if (mode === "create" && !newCategoryName.trim()) return false;
+    if (form.description.length > 500) return false;
+
+    return true;
+  };
+
   return (
     <>
-      <form className={style.form}>
+      <form className={style.form} onSubmit={handleSubmit}>
         <label className={style.label}>
           Tytuł:
           <input
@@ -121,19 +229,26 @@ const AddModalContent = ({ setModalType }: AddModalContentProps) => {
               <select
                 className={style.input}
                 value={form.categoryId ?? ""}
-                onChange={(e) =>
+                onChange={(e) => {
+                  const value = Number(e.target.value);
+
                   setForm((prev) => ({
                     ...prev,
-                    categoryId: Number(e.target.value),
-                  }))
-                }
+                    categoryId: value,
+                  }));
+
+                  setErrors((prev) => ({
+                    ...prev,
+                    categoryId: "",
+                  }));
+                }}
               >
                 <option value="" disabled>
                   Wybierz kategorię
                 </option>
                 {category.map((el: Category) => {
                   return (
-                    <option key={el.id} value="1">
+                    <option key={el.id} value={el.id}>
                       {el.name}
                     </option>
                   );
@@ -142,14 +257,30 @@ const AddModalContent = ({ setModalType }: AddModalContentProps) => {
               <button
                 type="button"
                 className="link__btn"
-                onClick={() => setMode("create")}
+                onClick={() => {
+                  setMode("create");
+                  setForm((prev) => ({
+                    ...prev,
+                    categoryId: null,
+                  }));
+                }}
               >
                 Stwórz nową kategorię:
               </button>
             </>
           ) : (
             <>
-              <input className={style.input} />
+              <input
+                className={style.input}
+                value={newCategoryName}
+                onChange={(e) => {
+                  setNewCategoryName(e.target.value);
+                  setErrors((prev) => ({
+                    ...prev,
+                    categoryId: "",
+                  }));
+                }}
+              />
               <button
                 type="button"
                 className="link__btn"
@@ -161,7 +292,7 @@ const AddModalContent = ({ setModalType }: AddModalContentProps) => {
           )}
         </label>
 
-        <label className={style.label}>
+        {/* <label className={style.label}>
           Dodaj tagi oddzielone przecinkiem:
           <input
             name="tags"
@@ -178,30 +309,30 @@ const AddModalContent = ({ setModalType }: AddModalContentProps) => {
               }))
             }
           />
-        </label>
+        </label> */}
         <label className={style.labelCheckbox}>
           Dodaj do ulubionych:
           <input
             type="checkbox"
             name="favorite"
             className={style.checkbox}
-            checked={form.tags.includes(1)}
-            onChange={(e) => {
-              const isChecked = e.target.checked;
+            checked={form.isFavorite}
+            onChange={(e) =>
               setForm((prev) => ({
                 ...prev,
-                tags: isChecked
-                  ? [...prev.tags, 1]
-                  : prev.tags.filter((tag) => tag !== 1),
-              }));
-            }}
+                isFavorite: e.target.checked,
+              }))
+            }
           />
         </label>
+        <div className={style.formError}>
+          {submitted && firstError ? <span>{firstError}</span> : null}
+        </div>
         <div className={style.buttonsWrapper}>
           <button
-            type="button"
+            type="submit"
             className="button__primary"
-            onClick={handleSubmit}
+            disabled={!isValid()}
           >
             Dodaj
           </button>
