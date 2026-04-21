@@ -12,18 +12,25 @@ import AddModalContent from "./components/AddModalContent/AddModalContent";
 
 function App() {
   const [modalType, setModalType] = useState<"add" | "edit" | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   return (
     <div className="main-container">
       <Sidebar onOpenModal={(type) => setModalType(type)} />
       {modalType === "add" ? (
         <Modal title="Dodaj link" onClose={() => setModalType(null)}>
-          <AddModalContent setModalType={setModalType} />
+          <AddModalContent
+            onSuccess={() => setRefreshKey((prev) => prev + 1)}
+            setModalType={setModalType}
+          />
         </Modal>
       ) : null}
       <Routes>
         <Route path={PATHS.DASHBOARD} element={<DashboardPage />} />
-        <Route path={PATHS.LINKS} element={<LinksPage />} />
+        <Route
+          path={PATHS.LINKS}
+          element={<LinksPage refreshKey={refreshKey} />}
+        />
         <Route path={PATHS.TO_READ} element={<ToReadPage />} />
         <Route path={PATHS.FAVORITE} element={<FavoritePage />} />
       </Routes>

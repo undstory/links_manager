@@ -4,7 +4,7 @@ import Card from "../../components/Card/Card";
 import style from "./LatestLinks.module.scss";
 import { colors, statusConfig } from "../../constants/stylesConfig";
 
-function LatestLinks() {
+function LatestLinks({ refreshKey }: { refreshKey: number }) {
   const [latestLinks, setLatestLinks] = useState<LinkType[] | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
@@ -21,7 +21,7 @@ function LatestLinks() {
   };
   useEffect(() => {
     fetchLinks();
-  }, []);
+  }, [refreshKey]);
 
   const updateStatus = async (id: number, status: StatusType) => {
     try {

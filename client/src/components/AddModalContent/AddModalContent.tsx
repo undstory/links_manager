@@ -14,9 +14,10 @@ type FormState = {
 
 type AddModalContentProps = {
   setModalType: Dispatch<SetStateAction<"add" | "edit" | null>>;
+  onSuccess: () => void;
 };
 
-const AddModalContent = ({ setModalType }: AddModalContentProps) => {
+const AddModalContent = ({ setModalType, onSuccess }: AddModalContentProps) => {
   const initialState: FormState = {
     title: "",
     url: "",
@@ -58,6 +59,10 @@ const AddModalContent = ({ setModalType }: AddModalContentProps) => {
 
     if (!form.title.trim()) {
       newErrors.title = "Tytuł jest wymagany";
+    } else if (form.title.length > 255) {
+      newErrors.title = "Tytuł jest za długi";
+    } else if (form.title.length < 3) {
+      newErrors.title = "Tytuł jest za krótki";
     }
 
     if (!form.url.trim()) {
@@ -153,6 +158,7 @@ const AddModalContent = ({ setModalType }: AddModalContentProps) => {
         throw new Error("Error");
       }
       setForm(initialState);
+      onSuccess();
       setModalType(null);
     } catch (e) {
       console.log(e);
@@ -175,18 +181,6 @@ const AddModalContent = ({ setModalType }: AddModalContentProps) => {
   const cancelAction = () => {
     setForm(initialState);
     setModalType(null);
-  };
-
-  const isValid = () => {
-    if (!form.title.trim()) return false;
-    if (!form.url.trim()) return false;
-    if (!/^https?:\/\/.+/.test(form.url)) return false;
-
-    if (mode === "select" && !form.categoryId) return false;
-    if (mode === "create" && !newCategoryName.trim()) return false;
-    if (form.description.length > 500) return false;
-
-    return true;
   };
 
   return (
@@ -329,11 +323,7 @@ const AddModalContent = ({ setModalType }: AddModalContentProps) => {
           {submitted && firstError ? <span>{firstError}</span> : null}
         </div>
         <div className={style.buttonsWrapper}>
-          <button
-            type="submit"
-            className="button__primary"
-            disabled={!isValid()}
-          >
+          <button type="submit" className="button__primary">
             Dodaj
           </button>
           <button

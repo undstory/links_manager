@@ -5,7 +5,7 @@ import type { LinkType } from "../../types/linkTypes";
 import { statusConfig } from "../../constants/stylesConfig";
 import Table from "../../components/Table/Table";
 
-function LinksPage() {
+function LinksPage({ refreshKey }: { refreshKey: number }) {
   const [allLinks, setAllLinks] = useState<LinkType[] | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
@@ -25,7 +25,7 @@ function LinksPage() {
 
   useEffect(() => {
     fetchLinks();
-  }, []);
+  }, [refreshKey]);
 
   const removeItem = async (id: number) => {
     try {
