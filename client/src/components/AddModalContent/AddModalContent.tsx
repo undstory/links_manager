@@ -105,10 +105,14 @@ const AddModalContent = ({ setModalType, onSuccess }: AddModalContentProps) => {
     setSubmitted(true);
     const errors = validate();
 
-    if (Object.keys(errors).length > 0) return;
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+      return;
+    }
     let categoryId = form.categoryId;
 
     if (mode === "create" && newCategoryName.trim() !== "") {
+      if (!form.title || !form.url) return;
       const formatted = newCategoryName
         .trim()
         .replace(/\s+/g, " ")
