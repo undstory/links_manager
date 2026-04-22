@@ -3,7 +3,7 @@ import { z } from "zod";
 export const linkSchema = z.object({
   title: z
     .string()
-    .min(4, "Ale tytuł jest wymagany")
+    .min(4, "Tytuł jest nadal za krótki")
     .max(255, "Tytuł jest za długi"),
   url: z.string().url("Niewłaściwy format URL"),
   description: z.string().max(500).optional(),

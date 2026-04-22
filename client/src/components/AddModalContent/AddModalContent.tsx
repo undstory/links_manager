@@ -33,7 +33,7 @@ const AddModalContent = ({ setModalType, onSuccess }: AddModalContentProps) => {
   const [newCategoryName, setNewCategoryName] = useState<string>("");
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [submitted, setSubmitted] = useState(false);
-  const firstError = Object.values(errors)[0];
+  const firstError = errors.global || Object.values(errors).find(Boolean);
   const fetchCategories = async () => {
     try {
       const res = await fetch("http://localhost:3001/categories");
@@ -155,7 +155,19 @@ const AddModalContent = ({ setModalType, onSuccess }: AddModalContentProps) => {
       });
 
       if (!res.ok) {
-        throw new Error("Error");
+        const data = await res.json();
+
+        const firstError =
+          data?.details?.fieldErrors?.title?.[0] ||
+          data?.details?.fieldErrors?.url?.[0] ||
+          data?.details?.fieldErrors?.categoryId?.[0] ||
+          data?.error;
+
+        setErrors((prev) => ({
+          ...prev,
+          global: firstError,
+        }));
+        return;
       }
       setForm(initialState);
       onSuccess();
