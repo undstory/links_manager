@@ -26,7 +26,10 @@ function App() {
         </Modal>
       ) : null}
       <Routes>
-        <Route path={PATHS.DASHBOARD} element={<DashboardPage />} />
+        <Route
+          path={PATHS.DASHBOARD}
+          element={<DashboardPage refreshKey={refreshKey} />}
+        />
         <Route
           path={PATHS.LINKS}
           element={<LinksPage refreshKey={refreshKey} />}
