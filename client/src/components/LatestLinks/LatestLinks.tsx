@@ -47,7 +47,13 @@ function LatestLinks({ refreshKey }: { refreshKey: number }) {
   return (
     <>
       <Card header="Najnowsze linki">
-        {latestLinks !== null ? (
+        {errorMessage ? (
+          <p className={style.errorMessage}>{errorMessage}</p>
+        ) : latestLinks === null ? (
+          <p>Ładowanie...</p>
+        ) : latestLinks.length === 0 ? (
+          <p>Brak najnowszych linków</p>
+        ) : (
           <ul>
             {latestLinks.map((item) => {
               const status = statusConfig[item.status];
@@ -75,8 +81,6 @@ function LatestLinks({ refreshKey }: { refreshKey: number }) {
               );
             })}
           </ul>
-        ) : (
-          errorMessage && <p className={style.errorMessage}>{errorMessage}</p>
         )}
       </Card>
     </>

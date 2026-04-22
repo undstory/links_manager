@@ -34,6 +34,7 @@ const AddModalContent = ({ setModalType, onSuccess }: AddModalContentProps) => {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [submitted, setSubmitted] = useState(false);
   const firstError = errors.global || Object.values(errors).find(Boolean);
+  const noCategories = category.length === 0;
   const fetchCategories = async () => {
     try {
       const res = await fetch("http://localhost:3001/categories");
@@ -49,6 +50,14 @@ const AddModalContent = ({ setModalType, onSuccess }: AddModalContentProps) => {
   useEffect(() => {
     fetchCategories();
   }, []);
+
+  useEffect(() => {
+    if (category.length === 0) {
+      setMode("create");
+    } else {
+      setMode("select");
+    }
+  }, [category]);
 
   useEffect(() => {
     setErrors(validate());
@@ -72,7 +81,7 @@ const AddModalContent = ({ setModalType, onSuccess }: AddModalContentProps) => {
     }
 
     if (mode === "select" && !form.categoryId) {
-      newErrors.categoryId = "Wybierz kategorię";
+      newErrors.categoryId = "Dodaj kategorię";
     }
 
     if (mode === "create" && !newCategoryName.trim()) {
@@ -234,7 +243,7 @@ const AddModalContent = ({ setModalType, onSuccess }: AddModalContentProps) => {
         </label>
         <label className={style.label}>
           Kategoria:
-          {mode === "select" ? (
+          {!noCategories && mode === "select" ? (
             <>
               <select
                 className={style.input}
@@ -290,14 +299,23 @@ const AddModalContent = ({ setModalType, onSuccess }: AddModalContentProps) => {
                     categoryId: "",
                   }));
                 }}
+                placeholder={
+                  noCategories
+                    ? "Podaj nazwę nowej kategorii"
+                    : "Wpisz nazwę kategorii"
+                }
               />
-              <button
-                type="button"
-                className="link__btn"
-                onClick={() => setMode("select")}
-              >
-                Wyszukaj kategorię
-              </button>
+              {noCategories ? null : (
+                <button
+                  type="button"
+                  className="link__btn"
+                  onClick={() => {
+                    if (category.length > 0) setMode("select");
+                  }}
+                >
+                  Wyszukaj kategorię
+                </button>
+              )}
             </>
           )}
         </label>

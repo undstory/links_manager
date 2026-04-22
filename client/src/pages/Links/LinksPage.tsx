@@ -16,7 +16,7 @@ function LinksPage({ refreshKey }: { refreshKey: number }) {
 
       const data: LinkType[] = await res.json();
 
-      if (data) setAllLinks(data);
+      setAllLinks(data);
     } catch (e) {
       console.log(e);
       setErrorMessage("Nie udało się pobrać danych, spróbuj póżniej");
@@ -43,12 +43,15 @@ function LinksPage({ refreshKey }: { refreshKey: number }) {
     <div className="main__container">
       <PageHeader title="wszystkie linki" />
       <div className="table__wrapper">
-        {allLinks === null ? (
-          errorMessage.length ? (
-            errorMessage
-          ) : (
-            "Nie udało się pobrać danych"
-          )
+        {errorMessage ? (
+          <p className={style.error}>{errorMessage}</p>
+        ) : allLinks === null ? (
+          <p>Ładowanie...</p>
+        ) : allLinks.length === 0 ? (
+          <div className={style.emptyState}>
+            <p>Brak linków w bazie</p>
+            <span>Dodaj pierwszy link, żeby zacząć</span>
+          </div>
         ) : (
           <Table
             data={allLinks}

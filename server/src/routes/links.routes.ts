@@ -61,12 +61,22 @@ router.delete("/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
-    const updatedLink = await prisma.link.delete({
+    const deletedLink = await prisma.link.delete({
       where: {
         id: Number(id),
       },
     });
-    res.json(updatedLink);
+
+    const count = await prisma.link.count({
+      where: { categoryId: deletedLink.categoryId },
+    });
+
+    if (count === 0) {
+      await prisma.category.delete({
+        where: { id: deletedLink.categoryId },
+      });
+    }
+    res.json(deletedLink);
   } catch (e) {
     res.status(500).json({ error: "error" });
   }
