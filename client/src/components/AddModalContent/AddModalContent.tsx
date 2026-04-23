@@ -9,7 +9,7 @@ type FormState = {
   description: string;
   categoryId: number | null;
   isFavorite: boolean;
-  // tags: number[];
+  tags: string[];
 };
 
 type AddModalContentProps = {
@@ -24,13 +24,14 @@ const AddModalContent = ({ setModalType, onSuccess }: AddModalContentProps) => {
     description: "",
     categoryId: null,
     isFavorite: false,
-    // tags: [],
+    tags: [],
   };
 
   const [form, setForm] = useState<FormState>(initialState);
   const [mode, setMode] = useState<"select" | "create">("select");
   const [category, setCategory] = useState<Category[]>([]);
   const [newCategoryName, setNewCategoryName] = useState<string>("");
+  const [tagsInput, setTagsInput] = useState("");
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [submitted, setSubmitted] = useState(false);
   const firstError = errors.global || Object.values(errors).find(Boolean);
@@ -128,6 +129,7 @@ const AddModalContent = ({ setModalType, onSuccess }: AddModalContentProps) => {
         .toLowerCase();
 
       const finalName = formatted.charAt(0).toUpperCase() + formatted.slice(1);
+
       try {
         const res = await fetch("http://localhost:3001/categories", {
           method: "POST",
@@ -159,12 +161,18 @@ const AddModalContent = ({ setModalType, onSuccess }: AddModalContentProps) => {
       }
     }
     try {
+      const parsedTags = tagsInput
+        .split(",")
+        .map((t) => t.trim().slice(0, 10))
+        .filter(Boolean)
+        .slice(0, 3);
+
       const res = await fetch("http://localhost:3001/links", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...form, categoryId }),
+        body: JSON.stringify({ ...form, categoryId, tags: parsedTags }),
       });
 
       if (!res.ok) {
@@ -182,6 +190,7 @@ const AddModalContent = ({ setModalType, onSuccess }: AddModalContentProps) => {
         }));
         return;
       }
+
       setForm(initialState);
       onSuccess();
       setModalType(null);
@@ -320,24 +329,16 @@ const AddModalContent = ({ setModalType, onSuccess }: AddModalContentProps) => {
           )}
         </label>
 
-        {/* <label className={style.label}>
-          Dodaj tagi oddzielone przecinkiem:
+        <label className={style.label}>
+          Dodaj tagi oddzielone przecinkiem (max trzy tagi):
           <input
             name="tags"
-            className={style.input}
-            value={form.tags.join(", ")}
-            onChange={(e) =>
-              setForm((prev) => ({
-                ...prev,
-                tags: e.target.value
-                  .split(",")
-                  .map((tag) => tag.trim())
-                  .filter(Boolean)
-                  .map(Number),
-              }))
-            }
+            className={`${style.input} ${style.tag}`}
+            placeholder="Max 3 tagi"
+            value={tagsInput}
+            onChange={(e) => setTagsInput(e.target.value)}
           />
-        </label> */}
+        </label>
         <label className={style.labelCheckbox}>
           Dodaj do ulubionych:
           <input

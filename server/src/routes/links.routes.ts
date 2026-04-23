@@ -2,6 +2,7 @@ import { Router } from "express";
 import { prisma } from "../lib/prisma";
 import { linkSchema } from "../validation/link.schema";
 import { normalizeText, formatTitle } from "../utils/formatters";
+import { Prisma } from "@prisma/client";
 
 const router = Router();
 
@@ -61,11 +62,14 @@ router.delete("/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
-    const deletedLink = await prisma.link.delete({
-      where: {
-        id: Number(id),
+    const deletedLink = (await prisma.link.delete({
+      where: { id: Number(id) },
+      include: {
+        tags: true,
       },
-    });
+    })) as Prisma.LinkGetPayload<{
+      include: { tags: true };
+    }>;
 
     const count = await prisma.link.count({
       where: { categoryId: deletedLink.categoryId },
@@ -76,6 +80,19 @@ router.delete("/:id", async (req, res) => {
         where: { id: deletedLink.categoryId },
       });
     }
+
+    for (const linkTag of deletedLink.tags) {
+      const count = await prisma.linkTag.count({
+        where: { tagId: linkTag.tagId },
+      });
+
+      if (count === 0) {
+        await prisma.tag.delete({
+          where: { id: linkTag.tagId },
+        });
+      }
+    }
+
     res.json(deletedLink);
   } catch (e) {
     res.status(500).json({ error: "error" });
@@ -92,7 +109,17 @@ router.post("/", async (req, res) => {
     });
   }
 
-  const { title, url, description, categoryId, isFavorite } = parsed.data;
+  const { title, url, description, categoryId, isFavorite, tags } = parsed.data;
+
+  const tagRecords = await Promise.all(
+    tags?.map(async (tagName: string) => {
+      return prisma.tag.upsert({
+        where: { name: tagName },
+        update: {},
+        create: { name: tagName },
+      });
+    }) ?? [],
+  );
 
   try {
     const newLink = await prisma.link.create({
@@ -102,6 +129,13 @@ router.post("/", async (req, res) => {
         description: description ? normalizeText(description) : undefined,
         categoryId,
         isFavorite: isFavorite ?? false,
+        tags: {
+          create: tagRecords.map((tag) => ({
+            tag: {
+              connect: { id: tag.id },
+            },
+          })),
+        },
       },
     });
 

@@ -8,7 +8,10 @@ export const linkSchema = z.object({
   url: z.string().url("Niewłaściwy format URL"),
   description: z.string().max(500).optional(),
   categoryId: z.number(),
-  tags: z.array(z.number()).optional(),
+  tags: z
+    .array(z.string().max(10, "Tag powinien mieć max 10 znaków"))
+    .max(3, "Max 3 tagi")
+    .optional(),
   isFavorite: z.boolean().optional(),
 });
 
