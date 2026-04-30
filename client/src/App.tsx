@@ -9,17 +9,27 @@ import FavoritePage from "./pages/Favorite/FavoritePage";
 import { useState } from "react";
 import { Modal } from "./components/Modal/Modal";
 import AddModalContent from "./components/AddModalContent/AddModalContent";
+import type { LinkType } from "./types/linkTypes";
 
 function App() {
   const [modalType, setModalType] = useState<"add" | "edit" | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [selectedLink, setSelectedLink] = useState<LinkType | null>(null);
 
   return (
     <div className="main-container">
-      <Sidebar onOpenModal={(type) => setModalType(type)} />
-      {modalType === "add" ? (
-        <Modal title="Dodaj link" onClose={() => setModalType(null)}>
+      <Sidebar setModalType={setModalType} />
+      {modalType ? (
+        <Modal
+          title={modalType === "add" ? "Dodaj link" : "Edytuj link"}
+          onClose={() => {
+            setModalType(null);
+            setSelectedLink(null);
+          }}
+        >
           <AddModalContent
+            type={modalType}
+            initialData={selectedLink ?? undefined}
             onSuccess={() => setRefreshKey((prev) => prev + 1)}
             setModalType={setModalType}
           />
@@ -32,7 +42,13 @@ function App() {
         />
         <Route
           path={PATHS.LINKS}
-          element={<LinksPage refreshKey={refreshKey} />}
+          element={
+            <LinksPage
+              setSelectedLink={setSelectedLink}
+              setModalType={setModalType}
+              refreshKey={refreshKey}
+            />
+          }
         />
         <Route path={PATHS.TO_READ} element={<ToReadPage />} />
         <Route path={PATHS.FAVORITE} element={<FavoritePage />} />

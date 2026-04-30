@@ -6,7 +6,17 @@ import { statusConfig } from "../../constants/stylesConfig";
 import Table from "../../components/Table/Table";
 import { updateStatus } from "../../api/updateStatus";
 
-function LinksPage({ refreshKey }: { refreshKey: number }) {
+type LinksPageProps = {
+  refreshKey: number;
+  setSelectedLink: (link: LinkType | null) => void;
+  setModalType: (type: "add" | "edit" | null) => void;
+};
+
+function LinksPage({
+  refreshKey,
+  setSelectedLink,
+  setModalType,
+}: LinksPageProps) {
   const [allLinks, setAllLinks] = useState<LinkType[] | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
@@ -27,6 +37,11 @@ function LinksPage({ refreshKey }: { refreshKey: number }) {
   useEffect(() => {
     fetchLinks();
   }, [refreshKey]);
+
+  const handleEdit = (link: LinkType) => {
+    setSelectedLink(link);
+    setModalType("edit");
+  };
 
   const handleOpen = async (item: LinkType) => {
     if (item.status === "TO_READ") {
@@ -111,8 +126,13 @@ function LinksPage({ refreshKey }: { refreshKey: number }) {
               },
               {
                 header: "Aktualizacja",
-                render: () => (
-                  <button className={style.buttonEdit}>Edytuj</button>
+                render: (el) => (
+                  <button
+                    className={style.buttonEdit}
+                    onClick={() => handleEdit(el)}
+                  >
+                    Edytuj
+                  </button>
                 ),
               },
               {

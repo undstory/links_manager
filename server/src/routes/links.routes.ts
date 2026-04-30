@@ -58,6 +58,92 @@ router.patch("/:id/status", async (req, res) => {
   }
 });
 
+router.put("/:id", async (req, res) => {
+  const linkId = Number(req.params.id);
+
+  if (isNaN(linkId)) {
+    return res.status(400).json({ error: "Niepoprawne ID" });
+  }
+
+  const parsed = linkSchema.safeParse(req.body);
+
+  if (!parsed.success) {
+    return res.status(400).json({
+      error: "Podałeś niepoprawne dane",
+      details: parsed.error.flatten(),
+    });
+  }
+
+  const { title, url, description, categoryId, isFavorite, tags } = parsed.data;
+
+  try {
+    const existingLink = await prisma.link.findUnique({
+      where: { id: linkId },
+    });
+
+    if (!existingLink) {
+      return res.status(404).json({ error: "Link nie istnieje" });
+    }
+
+    let tagRecords: { id: number }[] = [];
+
+    if (tags && tags.length > 0) {
+      tagRecords = await Promise.all(
+        tags.map(async (tagName: string) => {
+          return prisma.tag.upsert({
+            where: { name: tagName },
+            update: {},
+            create: { name: tagName },
+          });
+        }),
+      );
+    }
+
+    const updatedLink = await prisma.link.update({
+      where: { id: linkId },
+      data: {
+        title: formatTitle(title),
+        url: normalizeText(url),
+        description: description ? normalizeText(description) : undefined,
+        categoryId,
+        isFavorite: isFavorite ?? false,
+
+        ...(tags && {
+          tags: {
+            deleteMany: {},
+            create: tagRecords.map((tag) => ({
+              tag: {
+                connect: { id: tag.id },
+              },
+            })),
+          },
+        }),
+      },
+      include: {
+        tags: {
+          include: {
+            tag: true,
+          },
+        },
+        category: true,
+      },
+    });
+
+    await prisma.tag.deleteMany({
+      where: {
+        links: {
+          none: {},
+        },
+      },
+    });
+
+    res.json(updatedLink);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: "error", details: e });
+  }
+});
+
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
 

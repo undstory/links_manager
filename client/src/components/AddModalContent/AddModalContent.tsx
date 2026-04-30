@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import style from "./AddModalContent.module.scss";
-import type { Category } from "../../types/linkTypes";
+import type { Category, LinkType } from "../../types/linkTypes";
 
 type FormState = {
   title: string;
@@ -15,9 +15,16 @@ type FormState = {
 type AddModalContentProps = {
   setModalType: Dispatch<SetStateAction<"add" | "edit" | null>>;
   onSuccess: () => void;
+  type: "add" | "edit";
+  initialData?: LinkType | null;
 };
 
-const AddModalContent = ({ setModalType, onSuccess }: AddModalContentProps) => {
+const AddModalContent = ({
+  setModalType,
+  onSuccess,
+  type,
+  initialData,
+}: AddModalContentProps) => {
   const initialState: FormState = {
     title: "",
     url: "",
@@ -36,6 +43,12 @@ const AddModalContent = ({ setModalType, onSuccess }: AddModalContentProps) => {
   const [submitted, setSubmitted] = useState(false);
   const firstError = errors.global || Object.values(errors).find(Boolean);
   const noCategories = category.length === 0;
+  const endpoint =
+    type === "edit"
+      ? `http://localhost:3001/links/${initialData?.id}`
+      : "http://localhost:3001/links";
+
+  const method = type === "edit" ? "PUT" : "POST";
   const fetchCategories = async () => {
     try {
       const res = await fetch("http://localhost:3001/categories");
@@ -47,6 +60,24 @@ const AddModalContent = ({ setModalType, onSuccess }: AddModalContentProps) => {
       console.log(e);
     }
   };
+
+  useEffect(() => {
+    if (type === "edit" && initialData) {
+      setForm({
+        title: initialData.title,
+        url: initialData.url,
+        description: initialData.description ?? "",
+        categoryId: initialData.categoryId,
+        isFavorite: initialData.isFavorite,
+        tags: initialData.tags?.map((t) => t.tag.name) || [],
+      });
+
+      setTagsInput(initialData.tags?.map((t) => t.tag.name).join(", ") || "");
+    } else if (type === "add") {
+      setForm(initialState);
+      setTagsInput("");
+    }
+  }, [type, initialData]);
 
   useEffect(() => {
     fetchCategories();
@@ -167,8 +198,8 @@ const AddModalContent = ({ setModalType, onSuccess }: AddModalContentProps) => {
         .filter(Boolean)
         .slice(0, 3);
 
-      const res = await fetch("http://localhost:3001/links", {
-        method: "POST",
+      const res = await fetch(endpoint, {
+        method: method,
         headers: {
           "Content-Type": "application/json",
         },
@@ -359,7 +390,7 @@ const AddModalContent = ({ setModalType, onSuccess }: AddModalContentProps) => {
         </div>
         <div className={style.buttonsWrapper}>
           <button type="submit" className="button__primary">
-            Dodaj
+            {type === "add" ? "Dodaj link" : "Zapisz zmiany"}
           </button>
           <button
             type="button"
