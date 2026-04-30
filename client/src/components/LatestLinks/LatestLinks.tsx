@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import type { LinkType, StatusType } from "../../types/linkTypes";
+import type { LinkType } from "../../types/linkTypes";
 import Card from "../../components/Card/Card";
 import style from "./LatestLinks.module.scss";
 import { colors, statusConfig } from "../../constants/stylesConfig";
+import { updateStatus } from "../../api/updateStatus";
 
 function LatestLinks({ refreshKey }: { refreshKey: number }) {
   const [latestLinks, setLatestLinks] = useState<LinkType[] | null>(null);
@@ -22,20 +23,6 @@ function LatestLinks({ refreshKey }: { refreshKey: number }) {
   useEffect(() => {
     fetchLinks();
   }, [refreshKey]);
-
-  const updateStatus = async (id: number, status: StatusType) => {
-    try {
-      await fetch(`http://localhost:3001/links/${id}/status`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ status }),
-      });
-    } catch (e: unknown) {
-      console.log(e);
-    }
-  };
 
   const handleOpen = async (item: LinkType) => {
     if (item.status === "TO_READ") {

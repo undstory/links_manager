@@ -4,6 +4,7 @@ import style from "./LinksPage.module.scss";
 import type { LinkType } from "../../types/linkTypes";
 import { statusConfig } from "../../constants/stylesConfig";
 import Table from "../../components/Table/Table";
+import { updateStatus } from "../../api/updateStatus";
 
 function LinksPage({ refreshKey }: { refreshKey: number }) {
   const [allLinks, setAllLinks] = useState<LinkType[] | null>(null);
@@ -26,6 +27,13 @@ function LinksPage({ refreshKey }: { refreshKey: number }) {
   useEffect(() => {
     fetchLinks();
   }, [refreshKey]);
+
+  const handleOpen = async (item: LinkType) => {
+    if (item.status === "TO_READ") {
+      await updateStatus(item.id, "READ");
+      fetchLinks();
+    }
+  };
 
   const removeItem = async (id: number) => {
     try {
@@ -61,7 +69,13 @@ function LinksPage({ refreshKey }: { refreshKey: number }) {
                 header: "Nazwa linku",
                 render: (el) => (
                   <div className={style.tooltip}>
-                    <a href={el.url} className={style.url} target="_blank">
+                    <a
+                      href={el.url}
+                      className={style.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => handleOpen(el)}
+                    >
                       {el.title}
                       {el.description && el.description.length > 0 ? (
                         <span className={style.tooltipText}>
