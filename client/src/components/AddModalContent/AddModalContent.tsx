@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import style from "./AddModalContent.module.scss";
-import type { Category, LinkType } from "../../types/linkTypes";
+import type { Category, LinkType, StatusType } from "../../types/linkTypes";
 
 type FormState = {
   title: string;
@@ -10,6 +10,7 @@ type FormState = {
   categoryId: number | null;
   isFavorite: boolean;
   tags: string[];
+  status?: StatusType;
 };
 
 type AddModalContentProps = {
@@ -70,6 +71,7 @@ const AddModalContent = ({
         categoryId: initialData.categoryId,
         isFavorite: initialData.isFavorite,
         tags: initialData.tags?.map((t) => t.tag.name) || [],
+        status: initialData.status,
       });
 
       setTagsInput(initialData.tags?.map((t) => t.tag.name).join(", ") || "");
@@ -385,6 +387,28 @@ const AddModalContent = ({
             }
           />
         </label>
+        {type === "edit" ? (
+          <label className={style.statusLabel}>
+            Zmień status:
+            <select
+              className={style.input}
+              value={form.status}
+              onChange={(e) => {
+                const value = e.target.value;
+                setForm((prev) => ({
+                  ...prev,
+                  status: value as StatusType,
+                }));
+              }}
+            >
+              <option value="" disabled>
+                Wybierz status
+              </option>
+              <option value="READ">Przeczytane</option>
+              <option value="TO_READ">Do przeczytania</option>
+            </select>
+          </label>
+        ) : null}
         <div className={style.formError}>
           {submitted && firstError ? <span>{firstError}</span> : null}
         </div>

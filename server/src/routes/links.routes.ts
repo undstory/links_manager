@@ -74,7 +74,8 @@ router.put("/:id", async (req, res) => {
     });
   }
 
-  const { title, url, description, categoryId, isFavorite, tags } = parsed.data;
+  const { title, url, description, categoryId, isFavorite, tags, status } =
+    parsed.data;
 
   try {
     const existingLink = await prisma.link.findUnique({
@@ -107,6 +108,7 @@ router.put("/:id", async (req, res) => {
         description: description ? normalizeText(description) : undefined,
         categoryId,
         isFavorite: isFavorite ?? false,
+        status: status ?? existingLink.status,
 
         ...(tags && {
           tags: {

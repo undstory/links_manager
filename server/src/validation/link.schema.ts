@@ -1,3 +1,4 @@
+import { stat } from "node:fs";
 import { z } from "zod";
 
 export const linkSchema = z.object({
@@ -5,7 +6,12 @@ export const linkSchema = z.object({
     .string()
     .min(4, "Tytuł jest nadal za krótki")
     .max(255, "Tytuł jest za długi"),
-  url: z.string().url("Niewłaściwy format URL"),
+  url: z
+    .string()
+    .regex(
+      /^https?:\/\/([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/.*)?$/,
+      "Niewłaściwy format URL",
+    ),
   description: z.string().max(500).optional(),
   categoryId: z.number(),
   tags: z
@@ -13,6 +19,7 @@ export const linkSchema = z.object({
     .max(3, "Max 3 tagi")
     .optional(),
   isFavorite: z.boolean().optional(),
+  status: z.enum(["TO_READ", "READ"]).optional(),
 });
 
 export const categoryNameSchema = z.object({
