@@ -1,4 +1,4 @@
-# 🔗 Link Manager
+# Link Manager
 
 Fullstack web application for managing saved links with categories, tags
 and reading status tracking.
@@ -6,7 +6,7 @@ and reading status tracking.
 The goal of this project is to build a clean, scalable link management
 tool using a modern JavaScript stack and solid backend architecture.
 
-## 🚀 Tech Stack
+## Tech Stack
 
 ### Frontend
 
@@ -22,27 +22,26 @@ tool using a modern JavaScript stack and solid backend architecture.
 - Prisma ORM
 - MySQL
 
-## ✨ Features
+## Features
 
-### 🔹 Link Management IN PROGRESS
+### Link Management DONE
 
-- Add, edit and delete links
-- Custom description for each link
-- Reading status:
+- Add, edit and delete links DONE
+- Custom description for each link DONE
+- Reading status: DONE
   - `To Read`
   - `Read`
-  - `To Remember`
-- Mark as Favorite
+- Mark as Favorite DONE
 
-### 🔹 Categories & Tags
+### Categories & Tags IN PROGRESS
 
-- Assign one category per link
-- Assign multiple tags (many-to-many relation)
-- Create and manage categories
-- Create and manage tags
+- Assign one category per link DONE
+- Assign multiple tags (many-to-many relation) DONE
+- Create and manage categories DONE
+- Create and manage tags DONE
 - Display most popular categories and tags
 
-### 🔹 Dashboard
+### Dashboard IN PROGRESS
 
 - Quick statistics:
   - Total links
@@ -53,9 +52,9 @@ tool using a modern JavaScript stack and solid backend architecture.
   - Links added over time
 - Most popular categories
 - Most popular tags
-- Recently added links
+- Recently added links DONE
 
-### 🔹 Filtering & Search
+### Filtering & Search TODO
 
 - Filter by status
 - Filter by category
@@ -63,7 +62,7 @@ tool using a modern JavaScript stack and solid backend architecture.
 - Search by title or description
 - Sort by newest / oldest / alphabetical
 
-## 🧠 Architecture
+## Architecture
 
 The application is structured as a monorepo:
 
@@ -72,26 +71,27 @@ React + Vite
 
 Backend and frontend run independently and communicate via REST API.
 
-## 📊 Database Highlights
+## Database Highlights
 
 - Enum-based link status
 - Many-to-many relation for tags
 - Indexed fields for filtering and sorting
 - Aggregations for dashboard statistics
 
-## 🎯 Project Goals
+## Project Goals
 
 - Practice fullstack architecture!
 - Work with relational data and Prisma
 - Build reusable UI components with CSS Modules
 - Implement real-world dashboard statistics
 - Create a clean and scalable project structure
+- Add tests!
 
-## 🔮 Possible Future Improvements
+## Possible Future Improvements
 
 - User authentication (multi-user support)
 
-## 🛠️ Setup
+## Setup
 
 ### Backend
 
@@ -106,7 +106,7 @@ cd client\
 npm install\
 npm run dev
 
-## 📌 Status
+## Status
 
 In active development.
 
