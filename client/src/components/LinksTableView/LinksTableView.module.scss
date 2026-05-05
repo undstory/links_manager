@@ -1,0 +1,58 @@
+@use "../../styles/variables" as *;
+
+
+.tooltip {
+    position: relative;
+    cursor: help;
+}
+
+.tooltipText {
+    position: absolute;
+    bottom: 80%;
+    left: 20%;
+    background: $color-gray-text;
+    color: $color-gray-bg;
+    padding: 6px 10px;
+    border: 1px solid white;
+    border-radius: 6px;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.tooltip:hover .tooltipText {
+    opacity: 1;
+}
+
+.url {
+    color: $color-blue-text;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.tag {
+    background-color: #f3f4f6;
+    color: #374151;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    margin-right: 4px;
+    border: 1px solid #e5e7eb;
+}
+
+button {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.buttonEdit {
+    background-color: $color-blue-text;
+    color: $color-blue-bg;
+}
+.buttonDel {
+    background-color: var(--color-red);
+    color: $color-gray-bg;
+}
+
