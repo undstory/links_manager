@@ -89,3 +89,16 @@ a {
     transition: background-color 0.3s ease;
     min-width: 100px;
 }
+
+.input {
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.label {
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+}

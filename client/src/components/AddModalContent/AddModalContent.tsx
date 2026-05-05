@@ -259,7 +259,7 @@ const AddModalContent = ({
             name="title"
             value={form.title}
             onChange={handleChange}
-            className={style.input}
+            className="input"
           />
         </label>
 
@@ -269,7 +269,7 @@ const AddModalContent = ({
             name="url"
             value={form.url}
             onChange={handleChange}
-            className={style.input}
+            className="input"
           />
         </label>
 
@@ -277,7 +277,7 @@ const AddModalContent = ({
           Opis:
           <input
             name="description"
-            className={style.input}
+            className="input"
             value={form.description}
             onChange={handleChange}
             placeholder="Max 500 znaków"
@@ -288,7 +288,7 @@ const AddModalContent = ({
           {!noCategories && mode === "select" ? (
             <>
               <select
-                className={style.input}
+                className="input"
                 value={form.categoryId ?? ""}
                 onChange={(e) => {
                   const value = Number(e.target.value);
@@ -332,7 +332,7 @@ const AddModalContent = ({
           ) : (
             <>
               <input
-                className={style.input}
+                className="input"
                 value={newCategoryName}
                 onChange={(e) => {
                   setNewCategoryName(e.target.value);
@@ -366,7 +366,7 @@ const AddModalContent = ({
           Dodaj tagi oddzielone przecinkiem (max trzy tagi):
           <input
             name="tags"
-            className={`${style.input} ${style.tag}`}
+            className={`input ${style.tag}`}
             placeholder="Max 3 tagi"
             value={tagsInput}
             onChange={(e) => setTagsInput(e.target.value)}
