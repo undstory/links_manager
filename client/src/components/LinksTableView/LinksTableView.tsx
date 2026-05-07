@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { statusConfig } from "../../constants/stylesConfig";
 import type { LinkType } from "../../types/linkTypes";
 import SearchPanel from "../SearchPanel/SearchPanel";
@@ -22,19 +22,29 @@ const LinksTableView = ({
   onRemoveItem,
 }: LinksTableViewProps) => {
   const [searchForTitle, setSearchForTitle] = useState<string>("");
+  const [searchForDate, setSearchForDate] = useState<string>("");
 
   const filteredData = useMemo(() => {
-    return allLinks.filter((el) => {
-      if (!searchForTitle) return true;
-      return sanity(el.title).includes(searchForTitle);
-    }) as LinkType[];
-  }, [allLinks, searchForTitle]);
+    return allLinks
+      .filter((el) => {
+        if (!searchForTitle) return true;
+        return sanity(el.title).includes(searchForTitle);
+      })
+      .filter((el) => {
+        if (!searchForDate) return true;
+        console.log("el.createdAt", el.createdAt);
+        const apiDate = new Date(el.createdAt).toISOString().split("T")[0];
+        return apiDate === searchForDate;
+      });
+  }, [allLinks, searchForTitle, searchForDate]);
 
   return (
     <div className="table__wrapper">
       <SearchPanel
         setSearchForTitle={setSearchForTitle}
         searchForTitle={searchForTitle}
+        searchForDate={searchForDate}
+        setSearchForDate={setSearchForDate}
       />
       {errorMessage ? (
         <p className={style.error}>{errorMessage}</p>
