@@ -28,12 +28,9 @@ const LinksTableView = ({
     return allLinks
       .filter((el) => {
         if (!searchQuery) return true;
-        const searchTerm = searchQuery.toLowerCase();
         return (
-          sanity(el.title).includes(searchTerm) ||
-          sanity(el.description).includes(searchTerm) ||
-          (el.category && sanity(el.category.name).includes(searchTerm)) ||
-          (el.tags && el.tags.some(tag => sanity(tag.tag.name).includes(searchTerm)))
+          sanity(el.title).includes(searchQuery) ||
+          sanity(el.description).includes(searchQuery)
         );
       })
       .filter((el) => {
