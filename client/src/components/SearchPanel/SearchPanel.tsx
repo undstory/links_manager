@@ -1,23 +1,21 @@
 import style from "./SearchPanel.module.scss";
 
 type SearchPanelProps = {
-  searchForTitleOrDescription: string;
-  setSearchForTitleOrDescription: React.Dispatch<React.SetStateAction<string>>;
+  searchQuery: string;
+  setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
   searchForDate: string;
   setSearchForDate: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const SearchPanel = ({
-  searchForTitleOrDescription,
-  setSearchForTitleOrDescription,
+  searchQuery,
+  setSearchQuery,
   setSearchForDate,
   searchForDate,
 }: SearchPanelProps) => {
-  const handleSearchForTitleOrDescription = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleSearchQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value.trim();
-    setSearchForTitleOrDescription(query);
+    setSearchQuery(query);
   };
 
   const handleSearchForDate = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,13 +27,13 @@ const SearchPanel = ({
       <div className={style.filterSearchPart}>
         <div>
           <label className="label" htmlFor="search">
-            Szukaj po tytule lub opisie
+            Szukaj (tytuł, opis, kategoria, tagi)
           </label>
           <input
             type="text"
             className="input"
-            value={searchForTitleOrDescription}
-            onChange={handleSearchForTitleOrDescription}
+            value={searchQuery}
+            onChange={handleSearchQuery}
           />
         </div>
         <div>

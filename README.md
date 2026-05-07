@@ -56,10 +56,11 @@ tool using a modern JavaScript stack and solid backend architecture.
 
 ### Filtering & Search TODO
 
-- Filter by status
-- Filter by category
-- Filter by tags
-- Search by title or description
+- Filter by date DONE
+- Filter by status DONE
+- Filter by category DONE
+- Filter by tags DONE
+- Search by title or description DONE
 - Sort by newest / oldest / alphabetical
 
 ## Architecture

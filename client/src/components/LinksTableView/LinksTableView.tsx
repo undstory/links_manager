@@ -21,17 +21,19 @@ const LinksTableView = ({
   onOpen,
   onRemoveItem,
 }: LinksTableViewProps) => {
-  const [searchForTitleOrDescription, setSearchForTitleOrDescription] =
-    useState<string>("");
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [searchForDate, setSearchForDate] = useState<string>("");
 
   const filteredData = useMemo(() => {
     return allLinks
       .filter((el) => {
-        if (!searchForTitleOrDescription) return true;
+        if (!searchQuery) return true;
+        const searchTerm = searchQuery.toLowerCase();
         return (
-          sanity(el.title).includes(searchForTitleOrDescription) ||
-          sanity(el.description).includes(searchForTitleOrDescription)
+          sanity(el.title).includes(searchTerm) ||
+          sanity(el.description).includes(searchTerm) ||
+          (el.category && sanity(el.category.name).includes(searchTerm)) ||
+          (el.tags && el.tags.some(tag => sanity(tag.tag.name).includes(searchTerm)))
         );
       })
       .filter((el) => {
@@ -40,13 +42,13 @@ const LinksTableView = ({
         const apiDate = new Date(el.createdAt).toISOString().split("T")[0];
         return apiDate === searchForDate;
       });
-  }, [allLinks, searchForTitleOrDescription, searchForDate]);
+  }, [allLinks, searchQuery, searchForDate]);
 
   return (
     <div className="table__wrapper">
       <SearchPanel
-        setSearchForTitleOrDescription={setSearchForTitleOrDescription}
-        searchForTitleOrDescription={searchForTitleOrDescription}
+        setSearchQuery={setSearchQuery}
+        searchQuery={searchQuery}
         searchForDate={searchForDate}
         setSearchForDate={setSearchForDate}
       />
