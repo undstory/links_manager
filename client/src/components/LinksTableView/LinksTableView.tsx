@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { statusConfig } from "../../constants/stylesConfig";
 import type { LinkType } from "../../types/linkTypes";
 import SearchPanel from "../SearchPanel/SearchPanel";
@@ -21,14 +21,18 @@ const LinksTableView = ({
   onOpen,
   onRemoveItem,
 }: LinksTableViewProps) => {
-  const [searchForTitle, setSearchForTitle] = useState<string>("");
+  const [searchForTitleOrDescription, setSearchForTitleOrDescription] =
+    useState<string>("");
   const [searchForDate, setSearchForDate] = useState<string>("");
 
   const filteredData = useMemo(() => {
     return allLinks
       .filter((el) => {
-        if (!searchForTitle) return true;
-        return sanity(el.title).includes(searchForTitle);
+        if (!searchForTitleOrDescription) return true;
+        return (
+          sanity(el.title).includes(searchForTitleOrDescription) ||
+          sanity(el.description).includes(searchForTitleOrDescription)
+        );
       })
       .filter((el) => {
         if (!searchForDate) return true;
@@ -36,13 +40,13 @@ const LinksTableView = ({
         const apiDate = new Date(el.createdAt).toISOString().split("T")[0];
         return apiDate === searchForDate;
       });
-  }, [allLinks, searchForTitle, searchForDate]);
+  }, [allLinks, searchForTitleOrDescription, searchForDate]);
 
   return (
     <div className="table__wrapper">
       <SearchPanel
-        setSearchForTitle={setSearchForTitle}
-        searchForTitle={searchForTitle}
+        setSearchForTitleOrDescription={setSearchForTitleOrDescription}
+        searchForTitleOrDescription={searchForTitleOrDescription}
         searchForDate={searchForDate}
         setSearchForDate={setSearchForDate}
       />

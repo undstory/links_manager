@@ -2,6 +2,6 @@ export const firstLetter = (word: string): string => {
   return word[0].toUpperCase() + word.slice(1).toLowerCase();
 };
 
-export const sanity = (word: string) => {
-  return word.toLowerCase().trim();
+export const sanity = (word: string | null | undefined) => {
+  return word ? word.toLowerCase().trim() : "";
 };
