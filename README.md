@@ -27,6 +27,7 @@ tool using a modern JavaScript stack and solid backend architecture.
 ### CI/CD
 
 - GitHub Actions
+  [![CI Pipeline](https://github.com/undstory/links_manager/actions/workflows/ci.yml/badge.svg)](https://github.com/undstory/links_manager/actions/workflows/ci.yml)
 
 ## Features
 
@@ -92,6 +93,7 @@ Backend and frontend run independently and communicate via REST API.
 - Build reusable UI components with CSS Modules
 - Implement real-world dashboard statistics
 - Create a clean and scalable project structure
+- Implement CI/CD pipeline with GitHub Actions
 
 ## Possible Future Improvements
 
