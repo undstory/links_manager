@@ -1,10 +1,14 @@
 # Link Manager
 
-Fullstack web application for managing saved links with categories, tags
-and reading status tracking.
+[![CI Pipeline](https://github.com/undstory/links_manager/actions/workflows/ci.yml/badge.svg)](https://github.com/undstory/links_manager/actions/workflows/ci.yml)
 
-The goal of this project is to build a clean, scalable link management
-tool using a modern JavaScript stack and solid backend architecture.
+**Live Demo:** [https://links-manager-eight.vercel.app](https://links-manager-eight.vercel.app)
+**API Endpoint:** `https://links-manager-p4zn.onrender.com`
+
+Fullstack web application for managing saved links with categories, tags and reading status tracking.
+The goal of this project is to build a clean, scalable link management tool using a modern JavaScript stack and solid backend architecture.
+
+_Note: The backend is hosted on a free Render tier. It may take 15-50 seconds to wake up (cold start) on the first request._
 
 ## Tech Stack
 
@@ -21,13 +25,14 @@ tool using a modern JavaScript stack and solid backend architecture.
 - Node.js
 - Express
 - Prisma ORM
-- MySQL
-- Jest
+- MySQL (Aiven Cloud)
+- Jest & Supertest
 
-### CI/CD
+### DevOps & CI/CD
 
-- GitHub Actions
-  [![CI Pipeline](https://github.com/undstory/links_manager/actions/workflows/ci.yml/badge.svg)](https://github.com/undstory/links_manager/actions/workflows/ci.yml)
+- GitHub Actions (Automated CI/CD testing pipeline)
+- Vercel (Frontend Deployment)
+- Render (Backend Deployment)
 
 ## Features
 
@@ -58,10 +63,10 @@ tool using a modern JavaScript stack and solid backend architecture.
   - Read vs unread (Donut chart)
   - Links added over time
 - Most popular categories
-- Most popular tags
+- Most popular tags DONE
 - Recently added links DONE
 
-### Filtering & Search TODO
+### Filtering & Search IN PROGRESS
 
 - Filter by date DONE
 - Filter by status DONE
@@ -94,29 +99,33 @@ Backend and frontend run independently and communicate via REST API.
 - Implement real-world dashboard statistics
 - Create a clean and scalable project structure
 - Implement CI/CD pipeline with GitHub Actions
+- Deploy to cloud environment (Vercel + Render + remote DB)
 
 ## Possible Future Improvements
 
 - User authentication (multi-user support)
+- End-to-End (E2E) testing with Playwright
 
-## Setup
+## Setup (Local Development)
 
 ### Backend
 
-cd server\
-npm install\
-npx prisma migrate dev\
+cd server
+npm install
+Create .env file with your local DATABASE_URL
+npx prisma migrate dev
 npm run dev
 
 ### Frontend
 
-cd client\
-npm install\
+cd client
+npm install
+Create .env file with VITE_API_URL=http://localhost:your_port
 npm run dev
 
 ## Status
 
-In active development.
+Deployed & In active development.
 
 This project focuses on clean architecture, thoughtful UI design and
-real-world data modeling.
+real-world data modeling, and modern DevOps practices.
