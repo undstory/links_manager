@@ -3,6 +3,7 @@
 [![CI Pipeline](https://github.com/undstory/links_manager/actions/workflows/ci.yml/badge.svg)](https://github.com/undstory/links_manager/actions/workflows/ci.yml)
 
 **Live Demo:** [https://links-manager-eight.vercel.app](https://links-manager-eight.vercel.app)
+
 **API Endpoint:** `https://links-manager-p4zn.onrender.com`
 
 Fullstack web application for managing saved links with categories, tags and reading status tracking.
@@ -110,18 +111,18 @@ Backend and frontend run independently and communicate via REST API.
 
 ### Backend
 
-cd server
-npm install
-Create .env file with your local DATABASE_URL
-npx prisma migrate dev
-npm run dev
+cd server/
+npm install/
+Create .env file with your local DATABASE_URL/
+npx prisma migrate dev/
+npm run dev/
 
 ### Frontend
 
-cd client
-npm install
-Create .env file with VITE_API_URL=http://localhost:your_port
-npm run dev
+cd client/
+npm install/
+Create .env file with VITE_API_URL=http://localhost:your_port/
+npm run dev/
 
 ## Status
 
