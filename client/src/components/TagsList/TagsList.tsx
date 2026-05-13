@@ -11,7 +11,7 @@ function TagsList() {
 
   const fetchTags = async () => {
     try {
-      const res = await fetch("http://localhost:3001/tags");
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/tags`);
       if (!res.ok) throw new Error("Fetch failed");
       const data: TagType[] = await res.json();
       if (data) setTags(data);

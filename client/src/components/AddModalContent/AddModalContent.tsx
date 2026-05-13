@@ -46,13 +46,13 @@ const AddModalContent = ({
   const noCategories = category.length === 0;
   const endpoint =
     type === "edit"
-      ? `http://localhost:3001/links/${initialData?.id}`
-      : "http://localhost:3001/links";
+      ? `${import.meta.env.VITE_API_URL}/links/${initialData?.id}`
+      : `${import.meta.env.VITE_API_URL}/links`;
 
   const method = type === "edit" ? "PUT" : "POST";
   const fetchCategories = async () => {
     try {
-      const res = await fetch("http://localhost:3001/categories");
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/categories`);
       if (!res.ok) throw new Error("Fetch failed");
       const catData = await res.json();
 
@@ -164,7 +164,7 @@ const AddModalContent = ({
       const finalName = formatted.charAt(0).toUpperCase() + formatted.slice(1);
 
       try {
-        const res = await fetch("http://localhost:3001/categories", {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/categories`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

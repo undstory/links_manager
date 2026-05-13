@@ -21,7 +21,7 @@ function LinksPage({
 
   const fetchLinks = async () => {
     try {
-      const res = await fetch("http://localhost:3001/links/all");
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/links/all`);
       if (!res.ok) throw new Error("Fetch failed");
 
       const data: LinkType[] = await res.json();
@@ -51,7 +51,7 @@ function LinksPage({
 
   const removeItem = async (id: number) => {
     try {
-      const res = await fetch(`http://localhost:3001/links/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/links/${id}`, {
         method: "DELETE",
       });
       if (!res.ok) throw new Error("Delete failed");

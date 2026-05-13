@@ -11,7 +11,7 @@ function LatestLinks({ refreshKey }: { refreshKey: number }) {
 
   const fetchLinks = async () => {
     try {
-      const res = await fetch("http://localhost:3001/links/latest");
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/links/latest`);
       if (!res.ok) throw new Error("Fetch failed");
       const data: LinkType[] = await res.json();
       if (data) setLatestLinks(data);
