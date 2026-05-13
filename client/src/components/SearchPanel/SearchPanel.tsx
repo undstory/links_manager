@@ -22,8 +22,14 @@ const SearchPanel = ({
     const date = e.target.value;
     setSearchForDate(date);
   };
+
+  const handleCleanUp = () => {
+    setSearchQuery("");
+    setSearchForDate("");
+  };
+
   return (
-    <div>
+    <div className={style.searchPanel}>
       <div className={style.filterSearchPart}>
         <div>
           <label className="label" htmlFor="search">
@@ -47,6 +53,9 @@ const SearchPanel = ({
             onChange={handleSearchForDate}
           />
         </div>
+      </div>
+      <div className={style.sortingPart}>
+        <button onClick={handleCleanUp}>Wyczyść wyszukiwanie</button>
       </div>
     </div>
   );

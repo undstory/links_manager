@@ -1,0 +1,13 @@
+.searchPanel {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+
+.sortingPart, .filterSearchPart {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
