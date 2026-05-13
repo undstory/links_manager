@@ -14,6 +14,7 @@ tool using a modern JavaScript stack and solid backend architecture.
 - TypeScript
 - SCSS + CSS Modules
 - React Router
+- Jest
 
 ### Backend
 
@@ -21,6 +22,11 @@ tool using a modern JavaScript stack and solid backend architecture.
 - Express
 - Prisma ORM
 - MySQL
+- Jest
+
+### CI/CD
+
+- GitHub Actions
 
 ## Features
 
