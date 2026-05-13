@@ -86,7 +86,6 @@ Backend and frontend run independently and communicate via REST API.
 - Build reusable UI components with CSS Modules
 - Implement real-world dashboard statistics
 - Create a clean and scalable project structure
-- Add tests!
 
 ## Possible Future Improvements
 
