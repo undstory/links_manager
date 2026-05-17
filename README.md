@@ -1,8 +1,8 @@
-# Link Manager
+# Link Manager IN PROGRESS
 
 [![CI Pipeline](https://github.com/undstory/links_manager/actions/workflows/ci.yml/badge.svg)](https://github.com/undstory/links_manager/actions/workflows/ci.yml)
 
-**Live Demo:** [https://links-manager-eight.vercel.app](https://links-manager-eight.vercel.app)
+~~**Live Demo:** [https://links-manager-eight.vercel.app](https://links-manager-eight.vercel.app)~~
 
 **API Endpoint:** `https://links-manager-p4zn.onrender.com`
 
