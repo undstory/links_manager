@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { statusConfig } from "../../constants/stylesConfig";
 import type { LinkType } from "../../types/linkTypes";
 import SearchPanel from "../SearchPanel/SearchPanel";
@@ -41,6 +41,75 @@ const LinksTableView = ({
       });
   }, [allLinks, searchQuery, searchForDate]);
 
+  const keyExtractor = useCallback((el: LinkType) => el.id, []);
+
+  const columns = useMemo(
+    () => [
+      {
+        header: "Nazwa linku",
+        render: (el: LinkType) => (
+          <div className={style.tooltip}>
+            <a
+              href={el.url}
+              className={style.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => onOpen(el)}
+            >
+              {el.title}
+              {el.description && el.description.length > 0 ? (
+                <span className={style.tooltipText}>{el.description}</span>
+              ) : null}
+            </a>
+          </div>
+        ),
+      },
+      {
+        header: "Kategoria",
+        render: (el) => (el.category ? el.category.name : "-"),
+      },
+      {
+        header: "Tagi",
+        render: (el) =>
+          el.tags
+            ? el.tags.map((t) => (
+                <span className={style.tag} key={t.tag.id}>
+                  {t.tag.name}
+                </span>
+              ))
+            : "-",
+      },
+      {
+        header: "Status",
+        render: (el) => statusConfig[el.status].label,
+      },
+      {
+        header: "Dodane",
+        render: (el) => new Date(el.createdAt).toLocaleDateString(),
+      },
+      {
+        header: "Aktualizacja",
+        render: (el) => (
+          <button className={style.buttonEdit} onClick={() => onEdit(el)}>
+            Edytuj
+          </button>
+        ),
+      },
+      {
+        header: "Usuń link",
+        render: (el) => (
+          <button
+            className={style.buttonDel}
+            onClick={() => onRemoveItem(el.id)}
+          >
+            Usuń
+          </button>
+        ),
+      },
+    ],
+    [onEdit, onRemoveItem, onOpen],
+  );
+
   return (
     <div className="table__wrapper">
       <SearchPanel
@@ -58,75 +127,15 @@ const LinksTableView = ({
           <p>Brak linków w bazie</p>
           <span>Dodaj pierwszy link, żeby zacząć</span>
         </div>
+      ) : filteredData.length === 0 ? (
+        <div className={style.emptyState}>
+          <p>Brak linków spełniających kryteria wyszukiwania</p>
+        </div>
       ) : (
         <Table
           data={filteredData}
-          keyExtractor={(el) => el.id}
-          columns={[
-            {
-              header: "Nazwa linku",
-              render: (el) => (
-                <div className={style.tooltip}>
-                  <a
-                    href={el.url}
-                    className={style.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => onOpen(el)}
-                  >
-                    {el.title}
-                    {el.description && el.description.length > 0 ? (
-                      <span className={style.tooltipText}>
-                        {el.description}
-                      </span>
-                    ) : null}
-                  </a>
-                </div>
-              ),
-            },
-            {
-              header: "Kategoria",
-              render: (el) => (el.category ? el.category.name : "-"),
-            },
-            {
-              header: "Tagi",
-              render: (el) =>
-                el.tags
-                  ? el.tags.map((t) => (
-                      <span className={style.tag} key={t.tag.id}>
-                        {t.tag.name}
-                      </span>
-                    ))
-                  : "-",
-            },
-            {
-              header: "Status",
-              render: (el) => statusConfig[el.status].label,
-            },
-            {
-              header: "Dodane",
-              render: (el) => new Date(el.createdAt).toLocaleDateString(),
-            },
-            {
-              header: "Aktualizacja",
-              render: (el) => (
-                <button className={style.buttonEdit} onClick={() => onEdit(el)}>
-                  Edytuj
-                </button>
-              ),
-            },
-            {
-              header: "Usuń link",
-              render: (el) => (
-                <button
-                  className={style.buttonDel}
-                  onClick={() => onRemoveItem(el.id)}
-                >
-                  Usuń
-                </button>
-              ),
-            },
-          ]}
+          keyExtractor={keyExtractor}
+          columns={columns}
         />
       )}
     </div>

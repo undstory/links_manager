@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import PageHeader from "../../components/PageHeader/PageHeader";
 import type { LinkType } from "../../types/linkTypes";
 
@@ -37,29 +37,40 @@ function LinksPage({
     fetchLinks();
   }, [refreshKey]);
 
-  const handleEdit = (link: LinkType) => {
-    setSelectedLink(link);
-    setModalType("edit");
-  };
+  const handleEdit = useCallback(
+    (link: LinkType) => {
+      setSelectedLink(link);
+      setModalType("edit");
+    },
+    [setSelectedLink, setModalType],
+  );
 
-  const handleOpen = async (item: LinkType) => {
-    if (item.status === "TO_READ") {
-      await updateStatus(item.id, "READ");
-      fetchLinks();
-    }
-  };
+  const handleOpen = useCallback(
+    async (item: LinkType) => {
+      if (item.status === "TO_READ") {
+        await updateStatus(item.id, "READ");
+        fetchLinks();
+      }
+    },
+    [fetchLinks],
+  );
 
-  const removeItem = async (id: number) => {
-    try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/links/${id}`, {
-        method: "DELETE",
-      });
-      if (!res.ok) throw new Error("Delete failed");
-      setAllLinks((prev) => (prev ? prev.filter((el) => el.id !== id) : null));
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  const removeItem = useCallback(
+    async (id: number) => {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/links/${id}`, {
+          method: "DELETE",
+        });
+        if (!res.ok) throw new Error("Delete failed");
+        setAllLinks((prev) =>
+          prev ? prev.filter((el) => el.id !== id) : null,
+        );
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    [setAllLinks],
+  );
 
   return (
     <div className="main__container">
